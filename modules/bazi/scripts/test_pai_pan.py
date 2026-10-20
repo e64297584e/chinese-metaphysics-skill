@@ -88,6 +88,15 @@ class PaiPanTests(unittest.TestCase):
         self.assertEqual(p["year"], "己巳")
         self.assertNotEqual(p["year"], "庚午")
 
+    def test_precise_lichun_boundary(self):
+        """2048 立春约 12:04:44；边界前后不能被简式黄经的分钟误差混同。"""
+        code_a, out_a, err_a = run_pai("--solar", "2048-02-04", "--hour", "12:00", "--sex", "男")
+        code_b, out_b, err_b = run_pai("--solar", "2048-02-04", "--hour", "12:10", "--sex", "男")
+        self.assertEqual(code_a, 0, err_a)
+        self.assertEqual(code_b, 0, err_b)
+        self.assertEqual(pillars(out_a)["year"], "丁卯")
+        self.assertEqual(pillars(out_b)["year"], "戊辰")
+
     def test_late_zi_uses_next_day_pillar(self):
         """23:30 夜子时：日柱用次日辛巳，时支子。"""
         code, out, err = run_pai("--solar", "1990-05-15", "--hour", "23:30", "--sex", "男")
@@ -144,6 +153,24 @@ class PaiPanTests(unittest.TestCase):
         self.assertEqual(code_s, 0, err_s)
         self.assertEqual(pillars(out_l), pillars(out_s))
 
+    def test_leap_month_when_major_term_and_new_moon_share_date(self):
+        """Use Beijing civil dates for leap-month placement, not instant order.
+
+        These month starts are independently published in the Hong Kong
+        Observatory's Gregorian-Lunar conversion tables.
+        """
+        sys.path.insert(0, HERE)
+        import pai_pan
+
+        cases = (
+            ((1903, 6, 25), (1903, 5, 1, True)),
+            ((1955, 4, 22), (1955, 3, 1, True)),
+            ((2001, 5, 23), (2001, 4, 1, True)),
+        )
+        for solar, expected in cases:
+            with self.subTest(solar=solar):
+                self.assertEqual(pai_pan.solar_to_lunar(*solar), expected)
+
     def test_deceased_year_stops_liunian(self):
         """--deceased-year 2010：流年不出现 2011 及更晚。"""
         code, out, err = run_pai(
@@ -163,6 +190,21 @@ class PaiPanTests(unittest.TestCase):
         self.assertNotIn("2012", liunian)
         self.assertNotIn("2020", liunian)
         self.assertNotIn("2026", liunian)
+
+    def test_dayun_ranges_keep_qiyun_months(self):
+        """交运不是整岁时，每一步大运的起止月不能被丢掉。"""
+        code, out, err = run_pai("--solar", "1990-05-15", "--hour", "12:00", "--sex", "男")
+        self.assertEqual(code, 0, err)
+        qiyun = field(out, "起运")
+        self.assertRegex(qiyun, r"\d+岁\d+个月")
+        self.assertIn(qiyun + "起至", out)
+
+    def test_rejects_inconsistent_solar_and_lunar_inputs(self):
+        code, out, err = run_pai(
+            "--solar", "1990-05-16", "--lunar", "1990-04-21", "--shichen", "午", "--sex", "男"
+        )
+        self.assertEqual(code, 2)
+        self.assertIn("阳历与农历输入不一致", err)
 
 
 class ShenshaTests(unittest.TestCase):

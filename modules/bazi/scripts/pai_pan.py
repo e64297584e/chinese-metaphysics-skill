@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""四柱八字排盘（零第三方依赖，仅标准库）。
+"""四柱八字排盘。
 
 时区一律按北京时间 UTC+8，不用本机本地时区。
-节气用太阳视黄经定气（立春=315°），农历用定气定朔
-（冬至所在月为十一月，无中气之月为闰月）。
+节气与农历日期使用固定版本的 ``lunar_python`` 历法引擎；本文件
+保留 Meeus 计算作为独立审计实现，但不再把简式天文公式用于正式排盘。
 
 算法锚点（供 QA 对照）
 ---------------------
@@ -38,11 +38,11 @@
    余 1 天 ≈ 4 个月，余 2 天 ≈ 8 个月。起运前用月柱作小运。
    锚点：1990-05-15 男（阳年）必须顺排。
 
-7. 节气时刻：太阳视黄经（Meeus 简式，等价于寿星定气）。
-   立春=黄经 315°。精确到小时以上，覆盖 1900–2100。禁止写死「立春大约 2 月 3-5 日」。
+7. 节气时刻：正式排盘使用固定版本历法引擎的精确时刻。
+   Meeus 简式只作独立审计，不用于交界时刻定柱。立春=黄经 315°。
 
-8. 农历：节气+朔望。冬至所在月为十一月，无中气之月为闰月。
-   朔用 Meeus 定朔（TT），再换北京日期。
+8. 农历：正式转换使用固定版本历法引擎，并以公开历表作黄金用例。
+   Meeus 定朔/定气实现仅用于独立审计；闰月归属按北京时间民用日期判定。
    非闰月锚点：1990 农历四月廿一 = 1990-05-15。
 
 9. 神煞：与 references/shensha-table.md 同一张表。只输出命局命中的条目；
@@ -58,11 +58,14 @@ import sys
 from datetime import date, datetime, timedelta, timezone
 from functools import lru_cache
 
+from lunar_python import Lunar, LunarYear, Solar
+
 # ---------------------------------------------------------------------------
 # 常量
 # ---------------------------------------------------------------------------
 
 BJ = timezone(timedelta(hours=8))
+VERIFIED_CALENDAR_RANGE = (1901, 2100)
 J2000 = 2451545.0
 UNIX_JD = 2440587.5  # 1970-01-01 00:00 UTC
 
@@ -519,12 +522,26 @@ def solar_term_beijing(year, longitude):
     return jd_tt_to_beijing(solar_term_jd(year, longitude))
 
 
+def _lunar_python_jie(year, name):
+    """Return one of the twelve month-boundary terms in Beijing time."""
+    table = Solar.fromYmdHms(int(year), 7, 1, 12, 0, 0).getLunar().getJieQiTable()
+    solar = table[name]
+    return beijing(
+        solar.getYear(),
+        solar.getMonth(),
+        solar.getDay(),
+        solar.getHour(),
+        solar.getMinute(),
+        solar.getSecond(),
+    )
+
+
 def jie_events_around(year):
     """year-1 … year+1 的十二节，按北京时间排序。每项 (dt, name, zhi_index, lon, year)。"""
     events = []
     for y in (year - 1, year, year + 1):
         for lon, name, zhi_i in JIE_DEFS:
-            dt = solar_term_beijing(y, lon)
+            dt = _lunar_python_jie(y, name)
             events.append((dt, name, zhi_i, lon, y))
     events.sort(key=lambda x: x[0])
     return events
@@ -650,6 +667,23 @@ def last_new_moon_k_on_or_before(jd_tt):
     return k
 
 
+def last_new_moon_k_on_or_before_beijing_date(jd_tt):
+    """Return the last conjunction whose Beijing civil date is <= event date.
+
+    The modern Chinese calendar assigns both new moons and solar terms to
+    Beijing civil dates before deciding which lunar month contains a major
+    solar term.  Comparing the TT instants directly shifts the leap month when
+    a conjunction and a major solar term occur on the same Beijing date.
+    """
+    target = jd_tt_to_beijing(jd_tt).date()
+    k = _k_near(jd_tt)
+    while jd_tt_to_beijing(new_moon_jde(k)).date() > target:
+        k -= 1
+    while jd_tt_to_beijing(new_moon_jde(k + 1)).date() <= target:
+        k += 1
+    return k
+
+
 # ---------------------------------------------------------------------------
 # 农历（冬至十一月 + 无中气置闰）
 # ---------------------------------------------------------------------------
@@ -673,19 +707,22 @@ def lunar_months_between_dongzhi(dongzhi_year):
     y = int(dongzhi_year)
     dz0 = solar_term_jd(y, 270)
     dz1 = solar_term_jd(y + 1, 270)
-    k0 = last_new_moon_k_on_or_before(dz0)
-    k1 = last_new_moon_k_on_or_before(dz1)
+    # Calendar months and term containment are decided by Beijing civil date,
+    # not by the ordering of the two astronomical instants within that date.
+    k0 = last_new_moon_k_on_or_before_beijing_date(dz0)
+    k1 = last_new_moon_k_on_or_before_beijing_date(dz1)
     moons = [new_moon_jde(k) for k in range(k0, k1 + 1)]
     n = len(moons) - 1
     zhong = _zhongqi_jds(y)
     leap_index = None
     if n == 13:
         for i in range(n):
-            has = False
-            for z in zhong:
-                if moons[i] <= z < moons[i + 1]:
-                    has = True
-                    break
+            month_start = jd_tt_to_beijing(moons[i]).date()
+            next_month_start = jd_tt_to_beijing(moons[i + 1]).date()
+            has = any(
+                month_start <= jd_tt_to_beijing(z).date() < next_month_start
+                for z in zhong
+            )
             if not has:
                 leap_index = i
                 break
@@ -733,44 +770,25 @@ def lunar_months_covering_solar_year(solar_year):
 
 def solar_to_lunar(y, m, d):
     """公历日 → (农历年, 月, 日, 是否闰月)。"""
-    target = date(y, m, d)
-    months = lunar_months_covering_solar_year(y)
-    # 跨年：1 月可能落在上一段十二月，12 月落在下一年冬至段
-    if y - 1 >= 1890:
-        extra = lunar_months_between_dongzhi(y - 2)
-        months = list(extra) + list(months)
-    for info in months:
-        start = info["start"]
-        end = start + timedelta(days=info["days"])
-        if start <= target < end:
-            return info["year"], info["month"], (target - start).days + 1, info["leap"]
-    raise ValueError("无法把 %04d-%02d-%02d 换成农历（超出推算范围）" % (y, m, d))
+    lunar = Solar.fromYmd(int(y), int(m), int(d)).getLunar()
+    return lunar.getYear(), abs(lunar.getMonth()), lunar.getDay(), lunar.getMonth() < 0
 
 
 def lunar_to_solar(ly, lm, ld, leap=False):
     """农历日 → 公历 date。闰月必须 leap=True。"""
-    # 正月在「冬至(ly-1) → 冬至(ly)」段；冬月、腊月在下一段
-    months = list(lunar_months_between_dongzhi(ly - 1)) + list(lunar_months_between_dongzhi(ly))
-    found = None
-    for info in months:
-        if info["year"] == ly and info["month"] == lm and bool(info["leap"]) == bool(leap):
-            found = info
-            break
-    if found is None:
-        if leap:
-            raise ValueError("农历 %d年没有闰%s" % (ly, LUNAR_MONTH_NAMES.get(lm, str(lm) + "月")))
-        raise ValueError("找不到农历 %d年%s" % (ly, LUNAR_MONTH_NAMES.get(lm, str(lm) + "月")))
-    if ld < 1 or ld > found["days"]:
-        raise ValueError(
-            "农历 %d年%s%s只有 %d 天"
-            % (
-                ly,
-                "闰" if leap else "",
-                LUNAR_MONTH_NAMES.get(lm, str(lm) + "月"),
-                found["days"],
-            )
-        )
-    return found["start"] + timedelta(days=ld - 1)
+    ly, lm, ld = int(ly), int(lm), int(ld)
+    if not 1 <= lm <= 12 or ld < 1:
+        raise ValueError("农历月日超出范围")
+    if leap and LunarYear.fromYear(ly).getLeapMonth() != lm:
+        raise ValueError("农历 %d年没有闰%s" % (ly, LUNAR_MONTH_NAMES.get(lm, str(lm) + "月")))
+    try:
+        lunar = Lunar.fromYmd(ly, -lm if leap else lm, ld)
+    except Exception as exc:
+        raise ValueError("无效农历日期：%d年%s%d月%d日" % (ly, "闰" if leap else "", lm, ld)) from exc
+    if lunar.getYear() != ly or abs(lunar.getMonth()) != lm or lunar.getDay() != ld or (lunar.getMonth() < 0) != bool(leap):
+        raise ValueError("无效农历日期：%d年%s%d月%d日" % (ly, "闰" if leap else "", lm, ld))
+    solar = lunar.getSolar()
+    return date(solar.getYear(), solar.getMonth(), solar.getDay())
 
 
 def format_lunar(ly, lm, ld, leap):
@@ -951,7 +969,7 @@ def near_shichen_boundary(hour, minute):
 def resolve_year_pillar(birth_dt):
     """立春时刻分年。1990-02-03 10:00 → 己巳。"""
     cal_year = birth_dt.year
-    lichun = solar_term_beijing(cal_year, 315)
+    lichun = _lunar_python_jie(cal_year, "立春")
     year_num = cal_year if birth_dt >= lichun else cal_year - 1
     gan, zhi = gz_from_index(year_gz_index(year_num))
     return year_num, gan, zhi, lichun
@@ -1027,24 +1045,30 @@ def qiyun_from_days(days):
 
 
 def build_dayun(month_gan, month_zhi, forward, qiyun_years, qiyun_months, steps=8):
-    """从月柱下一柱（顺）或上一柱（逆）起排。月柱本身是起运前小运。"""
+    """从月柱下一柱（顺）或上一柱（逆）起排，并保留交运月份。"""
+    def age_text(total_months):
+        years, months = divmod(int(total_months), 12)
+        return "%d岁%d个月" % (years, months) if months else "%d岁" % years
+
     gi = GAN.index(month_gan)
     zi = ZHI.index(month_zhi)
     delta = 1 if forward else -1
     rows = []
-    start_age = qiyun_years
-    if qiyun_years > 0 or qiyun_months > 0:
-        if qiyun_months == 0:
-            pre_end = "%d岁" % qiyun_years
-        else:
-            pre_end = "%d岁%d个月" % (qiyun_years, qiyun_months)
-        rows.append(("起运前", "0岁-" + pre_end, month_gan + month_zhi + "（小运）"))
+    start_month = qiyun_years * 12 + qiyun_months
+    if start_month > 0:
+        rows.append(
+            (
+                "起运前",
+                "出生至%s前" % age_text(start_month),
+                month_gan + month_zhi + "（交运前参考；本版不另算小运）",
+            )
+        )
     for n in range(1, steps + 1):
         gi = (gi + delta) % 10
         zi = (zi + delta) % 12
-        a0 = start_age + (n - 1) * 10
-        a1 = a0 + 9
-        rows.append((str(n), "%d-%d岁" % (a0, a1), GAN[gi] + ZHI[zi]))
+        a0 = start_month + (n - 1) * 120
+        a1 = a0 + 120
+        rows.append((str(n), "%s起至%s前" % (age_text(a0), age_text(a1)), GAN[gi] + ZHI[zi]))
     return rows
 
 
@@ -1143,13 +1167,18 @@ def compute(
     else:
         # 邻近上一年或下一年立春
         for y in (birth_dt.year - 1, birth_dt.year + 1):
-            lc = solar_term_beijing(y, 315)
+            lc = _lunar_python_jie(y, "立春")
             if abs((birth_dt - lc).total_seconds()) <= 86400:
                 warnings.append("立春前后")
                 break
 
     if place and clock_known and near_shichen_boundary(hour, minute):
         warnings.append("校正后可能跨时辰")
+
+    if not VERIFIED_CALENDAR_RANGE[0] <= solar_date.year <= VERIFIED_CALENDAR_RANGE[1]:
+        warnings.append(
+            "日期超出1901–2100公开历表交叉核验范围；历法引擎仍会计算，但应另行查证"
+        )
 
     if now is None:
         now = datetime.now(BJ)
@@ -1359,7 +1388,13 @@ def run(argv=None):
         lunar_display = format_lunar(lunar_date.year, lunar_date.month, lunar_date.day, args.leap)
         if solar_date is None:
             solar_date = converted
-        # 两个都给：以阳历为准，农历仅展示（用用户给的农历字串）
+        elif solar_date != converted:
+            print(
+                "阳历与农历输入不一致：%s 对应阳历 %s，而不是 %s"
+                % (lunar_display, converted.isoformat(), solar_date.isoformat()),
+                file=sys.stderr,
+            )
+            return 2
 
     try:
         result = compute(

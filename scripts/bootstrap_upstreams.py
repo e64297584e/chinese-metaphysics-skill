@@ -12,6 +12,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 MANIFEST = ROOT / "references" / "upstreams.json"
+ROOT_REQUIREMENTS = ROOT / "requirements.txt"
 
 
 def run(command: list[str], *, cwd: Path | None = None) -> None:
@@ -81,6 +82,9 @@ def main() -> int:
     parser.add_argument("--install-deps", action="store_true", help="Install pinned modules' Python requirements")
     parser.add_argument("--offline", action="store_true", help="Verify existing checkouts without network access")
     args = parser.parse_args()
+
+    if args.install_deps:
+        run([sys.executable, "-m", "pip", "install", "-r", str(ROOT_REQUIREMENTS)])
 
     for source in load_sources():
         target = fetch_source(source, offline=args.offline)

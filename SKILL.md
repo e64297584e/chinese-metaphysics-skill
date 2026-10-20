@@ -9,7 +9,7 @@ Route one request through Bazi, Qimen Dunjia, Ziwei Doushu, Feng Shui, or an exp
 
 ## Prepare the skill
 
-Run this once before using Qimen, Ziwei, or the upstream Feng Shui reference:
+Run this once before using any calculator or the upstream Feng Shui reference:
 
 ```bash
 python3 scripts/bootstrap_upstreams.py --install-deps

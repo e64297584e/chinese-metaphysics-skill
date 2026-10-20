@@ -12,6 +12,12 @@
 - Neither reviewed repository contained a license file at the pinned commit. Do not copy their code, prompts, examples, or reference text into this repository without the copyright holder's permission or a later explicit license.
 - `scripts/bootstrap_upstreams.py` fetches those repositories into the ignored `.upstream/` directory for local use and verifies the exact commit. This repository distributes only the adapter and source metadata.
 
+## Calendar dependency and validation authorities
+
+- `lunar_python==1.4.8` is an MIT-licensed runtime dependency used for lunar-date conversion and exact solar-term boundaries. It is not treated as an authority by itself; version pinning only makes calculations reproducible.
+- Modern calendar rules follow `GB/T 33661-2017 农历的编算和颁行`, the current national standard under the Chinese Academy of Sciences.
+- Public golden cases for 1901–2100 use the Hong Kong Observatory Gregorian-Lunar conversion tables. Dates explicitly marked by the Observatory as near-midnight uncertainty cases must be reported as boundary cases rather than used to claim false exactness.
+
 ## Review rule
 
 Before updating a pin, inspect the new tree, license, dependencies, and tests. Record the new commit in `upstreams.json`, run the upstream test suites, then run this skill's validator and integration tests.
