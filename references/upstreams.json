@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "sources": [
+    {
+      "id": "bazi-skill",
+      "repository": "https://github.com/jinchenma94/bazi-skill.git",
+      "commit": "112a5d84cd1a001a0038cafca3be68d93e4c0cc9",
+      "license": "MIT",
+      "distribution": "bundled",
+      "path": "modules/bazi"
+    },
+    {
+      "id": "numerologist-skills",
+      "repository": "https://github.com/FANzR-arch/Numerologist_skills.git",
+      "commit": "53ab46e7856e8e07a8de8ea96a2d93ed6694bedf",
+      "license": "NOASSERTION",
+      "distribution": "runtime-fetch-only",
+      "path": ".upstream/Numerologist_skills",
+      "requirements": [
+        "qimen-dunjia/scripts/requirements.txt",
+        "ziwei-doushu/scripts/requirements.txt"
+      ]
+    },
+    {
+      "id": "fengshui-skill",
+      "repository": "https://github.com/voidforall/fengshui.skill.git",
+      "commit": "91762ccda4ea106260ff43f336df14adf08ae57d",
+      "license": "NOASSERTION",
+      "distribution": "runtime-fetch-only",
+      "path": ".upstream/fengshui.skill"
+    }
+  ]
+}
