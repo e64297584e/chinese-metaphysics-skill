@@ -64,6 +64,8 @@ Required: calendar type, birth date and time, sex. Optional: query year. Confirm
 
 Read `normalized_input`, `calendar`, `ruleset`, `chart`, `horoscope`, and `warnings`. Keep natal, decadal, and annual transformations distinct.
 
+When comparing another engine or dataset, read `ziwei-audit.md` first. Record both profile IDs and compare only fields supported by both sides. Report each mismatch as `known_convention`, `local_missing_coverage`, or `unexpected_difference`; never call an external implementation a gold standard solely because it has more stars or more generated rows. Exclude current-age fields unless the evaluation date is fixed.
+
 ## Feng Shui
 
 For a layout analysis collect:

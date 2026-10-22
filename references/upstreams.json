@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "sources": [
     {
       "id": "bazi-skill",
@@ -28,6 +28,27 @@
       "license": "NOASSERTION",
       "distribution": "runtime-fetch-only",
       "path": ".upstream/fengshui.skill"
+    },
+    {
+      "id": "ziwei-doushu-audit",
+      "repository": "https://github.com/Renhuai123/ziwei-doushu.git",
+      "commit": "0e39b5c9a17e707291f20ef3cc125b3e885351d4",
+      "release": "v4.0-13d",
+      "release_manifest_sha256": "770c64da335edfe01f9ca6a7536cc083e416a1b481782c662b6b1dcebf4fa866",
+      "license_evidence": {
+        "commit": "1059c347231c636bd86ddb78fd8ed430d5de8d2a",
+        "dataset_license_sha256": "0a932a7cbbeef3304acf598f0fcb04ae3123089252401a282c1022602f9746e3",
+        "tianji_license_sha256": "eeaecc9cacf60d639da49277a788456fe862f1d15dee21ff91fc3b80346b3b09"
+      },
+      "dataset_profile": "renhuai-v4-xd2-no-location",
+      "license": "MIT",
+      "license_scope": "code-only",
+      "data_license": "CC-BY-4.0-with-excluded-third-party-quotes",
+      "distribution": "runtime-fetch-only",
+      "path": ".upstream/ziwei-doushu-audit",
+      "purpose": "external-audit-only",
+      "optional": true,
+      "install": "npm-ci-ignore-scripts"
     }
   ]
 }

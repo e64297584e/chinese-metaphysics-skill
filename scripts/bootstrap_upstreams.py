@@ -34,6 +34,12 @@ def verify_commit(target: Path, commit: str) -> None:
         raise RuntimeError(f"commit verification failed for {target}: {actual} != {commit}")
 
 
+def verify_clean(target: Path) -> None:
+    status = output(["git", "status", "--porcelain=v1", "--untracked-files=all"], cwd=target)
+    if status:
+        raise RuntimeError(f"pinned checkout has local changes: {target}")
+
+
 def fetch_source(source: dict[str, object], *, offline: bool) -> Path:
     target = ROOT / str(source["path"])
     commit = str(source["commit"])
@@ -48,6 +54,7 @@ def fetch_source(source: dict[str, object], *, offline: bool) -> Path:
         if not (target / ".git").exists():
             raise RuntimeError(f"runtime source is not installed: {source['id']}")
         verify_commit(target, commit)
+        verify_clean(target)
         return target
 
     target.parent.mkdir(parents=True, exist_ok=True)
@@ -57,14 +64,16 @@ def fetch_source(source: dict[str, object], *, offline: bool) -> Path:
         remote = output(["git", "remote", "get-url", "origin"], cwd=target)
         if remote.rstrip("/") != repository.rstrip("/"):
             raise RuntimeError(f"unexpected origin for {target}: {remote}")
+        verify_clean(target)
 
     run(["git", "fetch", "--depth", "1", "origin", commit], cwd=target)
     run(["git", "checkout", "--detach", commit], cwd=target)
     verify_commit(target, commit)
+    verify_clean(target)
     return target
 
 
-def install_requirements(source: dict[str, object], target: Path) -> None:
+def install_dependencies(source: dict[str, object], target: Path) -> None:
     seen: set[str] = set()
     for relative in source.get("requirements", []):
         requirements = target / str(relative)
@@ -76,20 +85,41 @@ def install_requirements(source: dict[str, object], target: Path) -> None:
         seen.add(key)
         run([sys.executable, "-m", "pip", "install", "-r", str(requirements)])
 
+    installer = source.get("install")
+    if installer is None:
+        return
+    if installer == "npm-ci-ignore-scripts":
+        if not (target / "package-lock.json").exists():
+            raise RuntimeError(f"package-lock.json is missing: {target}")
+        run(["npm", "ci", "--ignore-scripts", "--no-audit", "--no-fund"], cwd=target)
+        return
+    raise RuntimeError(f"unsupported dependency installer for {source['id']}: {installer}")
+
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--install-deps", action="store_true", help="Install pinned modules' Python requirements")
+    parser.add_argument("--install-deps", action="store_true", help="Install dependencies for selected pinned sources")
     parser.add_argument("--offline", action="store_true", help="Verify existing checkouts without network access")
+    parser.add_argument(
+        "--include-audit",
+        action="store_true",
+        help="Fetch optional external audit sources; they are never used as primary calculators",
+    )
     args = parser.parse_args()
+
+    if args.offline and args.install_deps:
+        parser.error("--offline cannot be combined with --install-deps because installers may access package indexes")
 
     if args.install_deps:
         run([sys.executable, "-m", "pip", "install", "-r", str(ROOT_REQUIREMENTS)])
 
     for source in load_sources():
+        if source.get("optional") and not args.include_audit:
+            print(f"SKIP optional {source['id']} (use --include-audit)")
+            continue
         target = fetch_source(source, offline=args.offline)
-        if args.install_deps and source.get("requirements"):
-            install_requirements(source, target)
+        if args.install_deps and (source.get("requirements") or source.get("install")):
+            install_dependencies(source, target)
         print(f"OK {source['id']} {source['commit']} -> {target.relative_to(ROOT)}")
     return 0
 

@@ -18,6 +18,8 @@ python3 scripts/doctor.py
 
 The bootstrap pins upstream repositories to reviewed commits. It does not vendor repositories that lack an explicit redistribution license. Read `references/sources.md` before changing or republishing the source layout.
 
+External Ziwei implementations and datasets are not primary authorities. Read `references/ziwei-audit.md` before fetching or comparing the optional audit source. Never import its interpretation text into this skill.
+
 ## Route the request
 
 - Use **Bazi** for four pillars, day-master strength, ten gods, luck cycles, annual influences, or a broad life-pattern reading.
@@ -68,6 +70,8 @@ python3 scripts/run_module.py ziwei --input tmp/ziwei-input.json --output tmp/zi
 ```
 
 Use the normalized input, warnings, twelve palaces, four transformations, and period overlays from the script. If the time is uncertain, run the plausible time branches and compare them.
+
+For an external comparison, preserve the local result and classify differences as `agreement`, `known_convention`, `local_missing_coverage`, or `unexpected_difference`. Do not let one external output silently change the selected ruleset. The optional `Renhuai123/ziwei-doushu` snapshot is evidence tier C: use it to find regressions and coverage gaps, not as ground truth. Its v4 interpretation dataset cannot reproduce a full chart and its text must not be used for training, RAG, or responses.
 
 ## Use Feng Shui
 
