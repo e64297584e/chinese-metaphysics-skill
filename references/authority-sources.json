@@ -1,0 +1,344 @@
+{
+  "schema_version": 1,
+  "reviewed_at": "2026-10-22",
+  "sources": [
+    {
+      "id": "gbt-33661-2017",
+      "tier": "A",
+      "systems": ["calendar"],
+      "scope": "mainland-china-lunar-calendar-rules",
+      "title": "GB/T 33661-2017 农历的编算和颁行",
+      "version": "2017; confirmed effective after 2023-12-28 review",
+      "publisher": "Standardization Administration of China",
+      "canonical_urls": [
+        "https://openstd.samr.gov.cn/bzgk/std/newGbInfo?hcno=E107EA4DE9725EDF819F33C60A44B296&refer=outter",
+        "https://std.samr.gov.cn/gb/search/gbDetailed?id=71F772D817FDD3A7E05397BE0A0AB82A",
+        "https://pmo.cas.cn/xwdt2019/kpdt2019/202203/P020240201504886119982.pdf"
+      ],
+      "rights": "reference-only",
+      "permitted_uses": [
+        "normative-rule-citation",
+        "sparse-derived-test-facts"
+      ],
+      "blocked_uses": [
+        "redistribute-standard-text"
+      ],
+      "notes": [
+        "Use Beijing civil time for the standard's calendar-day decisions.",
+        "The standard is authoritative for its stated modern calculation profile, not for every historically issued calendar."
+      ]
+    },
+    {
+      "id": "pmo-issued-calendar-1900-2025",
+      "tier": "A",
+      "systems": ["calendar"],
+      "scope": "historically-issued-and-modern-mainland-calendar",
+      "title": "紫金山天文台 1900—2025年日历",
+      "version": "download reviewed 2026-10-22",
+      "publisher": "Purple Mountain Observatory, Chinese Academy of Sciences",
+      "canonical_urls": [
+        "https://pmo.cas.cn/xwdt2019/kpdt2019/202203/t20220309_6386774.html",
+        "https://www.pmo.cas.cn/xwdt2019/kpdt2019/202203/P020250414456381274062.pdf"
+      ],
+      "rights": "reference-only",
+      "permitted_uses": [
+        "sparse-golden-facts-with-page-citation",
+        "historical-calendar-review"
+      ],
+      "blocked_uses": [
+        "mirror-full-pdf",
+        "assume-all-years-use-one-proleptic-algorithm"
+      ],
+      "notes": [
+        "1900-1911 follows issued Qing calendars, 1912-1948 follows issued Republican calendars, and 1949-2025 follows the modern standard profile.",
+        "Tag every test as historical_issued_calendar or proleptic_modern_calendar."
+      ]
+    },
+    {
+      "id": "pmo-calendar-2026",
+      "tier": "A",
+      "systems": ["calendar"],
+      "scope": "official-mainland-calendar-2026",
+      "title": "紫金山天文台 2026年日历",
+      "version": "2026 edition; reviewed 2026-10-22",
+      "publisher": "Purple Mountain Observatory, Chinese Academy of Sciences",
+      "canonical_urls": [
+        "https://pmo.cas.cn/xwdt2019/kpdt2019/202203/P020251230620718707826.pdf"
+      ],
+      "rights": "reference-only",
+      "permitted_uses": [
+        "sparse-golden-facts-with-page-citation"
+      ],
+      "blocked_uses": [
+        "mirror-full-pdf",
+        "claim-more-precision-than-published"
+      ],
+      "notes": [
+        "The published 2026 Li Chun time is minute precision; adjacent-minute tests must not be described as second-level goldens."
+      ]
+    },
+    {
+      "id": "hko-conversion-1901-2100",
+      "tier": "A",
+      "systems": ["calendar"],
+      "scope": "gregorian-lunar-conversion-and-boundary-warnings",
+      "title": "Hong Kong Observatory Gregorian-Lunar Calendar Conversion Table",
+      "version": "1901-2100; reviewed 2026-10-22",
+      "publisher": "Hong Kong Observatory",
+      "canonical_urls": [
+        "https://www.hko.gov.hk/en/gts/time/conversion.htm",
+        "https://data.gov.hk/en-data/dataset/hk-hko-rss-gregorian-lunar-calendar-conversion-table",
+        "https://data.weather.gov.hk/weatherAPI/opendata/lunardate.php",
+        "https://data.gov.hk/en/terms-and-conditions"
+      ],
+      "rights": "open-with-attribution",
+      "permitted_uses": [
+        "download",
+        "redistribute-with-attribution",
+        "sparse-golden-facts",
+        "boundary-warning-cases"
+      ],
+      "blocked_uses": [
+        "remove-source-attribution",
+        "resell-unmodified-source-data"
+      ],
+      "notes": [
+        "The Observatory flags far-future near-midnight new-moon cases whose civil date may change as models improve.",
+        "Keep those dates as uncertainty cases rather than hard correctness claims.",
+        "DATA.GOV.HK terms version 1.2 (2025-05-26) permit reuse with source and intellectual-property attribution; prefer the open-data resource over assuming every HKO PDF has identical terms."
+      ]
+    },
+    {
+      "id": "iana-tzdb-2026e",
+      "tier": "A",
+      "systems": ["civil-time"],
+      "scope": "post-1970-civil-time-zones",
+      "title": "IANA Time Zone Database",
+      "version": "2026e",
+      "publisher": "IANA Time Zone Database maintainers",
+      "canonical_urls": [
+        "https://data.iana.org/time-zones/tzdb/version",
+        "https://data.iana.org/time-zones/tzdb/LICENSE",
+        "https://data.iana.org/time-zones/tzdb-2026e/asia"
+      ],
+      "checksum": {
+        "algorithm": "sha512",
+        "artifact": "tzdata2026e.tar.gz",
+        "value": "5be2f875f73b75e5783c474bf7a6c768e433cc90283f8fc6a75e3d05bd92aec97936e8a55ccca5e880b5dacc18ba65932bab0e783e1ed5d2af4a3a4df95512be"
+      },
+      "rights": "public-domain-and-permissive-components",
+      "permitted_uses": [
+        "runtime-dependency",
+        "civil-time-test-fixtures",
+        "redistribute-under-upstream-terms"
+      ],
+      "blocked_uses": [
+        "claim-pre-1970-history-is-complete"
+      ],
+      "notes": [
+        "Python tzdata 2026.5 embeds tzdb 2026e in this repository's reviewed environment.",
+        "Historical China, wartime zones, and parallel civil-time practices require an explicit limitation."
+      ]
+    },
+    {
+      "id": "jpl-de440s",
+      "tier": "A",
+      "systems": ["astronomy"],
+      "scope": "planetary-and-lunar-ephemeris-input",
+      "title": "JPL Planetary and Lunar Ephemeris DE440s",
+      "version": "DE440s; 1849-2150",
+      "publisher": "NASA Jet Propulsion Laboratory",
+      "canonical_urls": [
+        "https://naif.jpl.nasa.gov/pub/naif/generic_kernels/spk/planets/",
+        "https://naif.jpl.nasa.gov/pub/naif/generic_kernels/spk/planets/aa_checksums.txt",
+        "https://naif.jpl.nasa.gov/pub/naif/generic_kernels/spk/planets/aa_summaries.txt",
+        "https://naif.jpl.nasa.gov/naif/rules.html"
+      ],
+      "checksum": {
+        "algorithm": "md5",
+        "artifact": "de440s.bsp",
+        "value": "3917ee56769db332790c751e2168843d"
+      },
+      "rights": "nasa-naif-rules",
+      "permitted_uses": [
+        "ephemeris-validation",
+        "unaltered-redistribution-under-naif-rules"
+      ],
+      "blocked_uses": [
+        "treat-ephemeris-as-calendar-answer"
+      ],
+      "notes": [
+        "A calendar derivation still needs timescale, Delta-T, precession-nutation, timezone, and calendar-rule choices."
+      ]
+    },
+    {
+      "id": "erfa-2.0.1",
+      "tier": "A",
+      "systems": ["astronomy"],
+      "scope": "astronomical-reference-algorithms",
+      "title": "ERFA v2.0.1 based on SOFA Release 19",
+      "version": "v2.0.1",
+      "publisher": "ERFA project",
+      "canonical_urls": [
+        "https://github.com/liberfa/erfa/releases/tag/v2.0.1"
+      ],
+      "commit": "9915ba38c9365f8b0738269b8c2ac1fdd5f8dee3",
+      "rights": "BSD-3-Clause",
+      "permitted_uses": [
+        "dependency",
+        "astronomical-validation"
+      ],
+      "blocked_uses": [],
+      "notes": [
+        "Prefer ERFA's permissive distribution for derived work; preserve upstream notices."
+      ]
+    },
+    {
+      "id": "delta-t-figshare-2026",
+      "tier": "B",
+      "systems": ["astronomy"],
+      "scope": "historical-delta-t-model-and-uncertainty",
+      "title": "Earth Rotation, Delta T and length of day project",
+      "version": "2025 coefficients plus 2026 supplement",
+      "publisher": "Stephenson, Morrison, and collaborators",
+      "canonical_urls": [
+        "https://figshare.com/projects/Earth_Rotation_Delta_T_DT_and_length_of_day_lod_/260597",
+        "https://doi.org/10.6084/m9.figshare.29920409.v1",
+        "https://doi.org/10.6084/m9.figshare.33197244.v1"
+      ],
+      "rights": "CC-BY-4.0",
+      "permitted_uses": [
+        "historical-astronomy-validation",
+        "uncertainty-modeling-with-attribution"
+      ],
+      "blocked_uses": [
+        "claim-historical-second-level-certainty"
+      ],
+      "notes": [
+        "Use as a model with uncertainty, not an exact observed truth for every historical date."
+      ]
+    },
+    {
+      "id": "iers-bulletin-c-72",
+      "tier": "A",
+      "systems": ["astronomy", "civil-time"],
+      "scope": "modern-leap-second-status",
+      "title": "IERS Bulletin C 72",
+      "version": "2026-07-06",
+      "publisher": "International Earth Rotation and Reference Systems Service",
+      "canonical_urls": [
+        "https://datacenter.iers.org/data/html/bulletinc-072.html",
+        "https://data.iers.org/eop.php"
+      ],
+      "rights": "reference-only",
+      "permitted_uses": [
+        "online-reference",
+        "sparse-status-fact"
+      ],
+      "blocked_uses": [
+        "redistribute-unreviewed-bulk-products"
+      ],
+      "notes": [
+        "Bulletin C 72 announces no leap second at the end of December 2026."
+      ]
+    },
+    {
+      "id": "kasi-lunisolar-api",
+      "tier": "B",
+      "systems": ["calendar"],
+      "scope": "korean-standard-time-lunisolar-differential-check",
+      "title": "KASI Lunisolar Calendar Information Service",
+      "version": "service reviewed 2026-10-22",
+      "publisher": "Korea Astronomy and Space Science Institute",
+      "canonical_urls": [
+        "https://www.data.go.kr/data/15012679/openapi.do",
+        "https://apis.data.go.kr/B090041/openapi/service/LrsrCldInfoService/getLunCalInfo"
+      ],
+      "rights": "public-data-unrestricted-use-as-stated-by-portal",
+      "permitted_uses": [
+        "ordinary-date-differential-check"
+      ],
+      "blocked_uses": [
+        "treat-korean-and-chinese-boundary-differences-as-errors"
+      ],
+      "notes": [
+        "The service uses Korean standard time and can legitimately differ from a China calendar near boundaries."
+      ]
+    },
+    {
+      "id": "kanripo-sanming-tonghui",
+      "tier": "A",
+      "systems": ["bazi"],
+      "scope": "versioned-classical-rule-provenance",
+      "title": "三命通会, WYG edition",
+      "version": "Kanripo KR3g0042",
+      "publisher": "Kanripo",
+      "canonical_urls": [
+        "https://github.com/kanripo/KR3g0042"
+      ],
+      "commit": "efe780a4f6fd835f4e2d769ffc8f79b7099db3b1",
+      "rights": "CC-BY-SA-4.0",
+      "permitted_uses": [
+        "versioned-citation",
+        "short-attributed-quotation"
+      ],
+      "blocked_uses": [
+        "vendor-full-text-without-share-alike-compliance",
+        "treat-one-reading-as-only-school"
+      ],
+      "notes": [
+        "Record work ID, edition, juan, passage, and commit for each rule citation."
+      ]
+    },
+    {
+      "id": "kanripo-dunjia-yanyi",
+      "tier": "A",
+      "systems": ["qimen"],
+      "scope": "versioned-classical-rule-provenance",
+      "title": "遁甲演义, WYG edition",
+      "version": "Kanripo KR3g0048",
+      "publisher": "Kanripo",
+      "canonical_urls": [
+        "https://github.com/kanripo/KR3g0048"
+      ],
+      "commit": "e26b129b0c57f5cb7f3efcc1e36bcb7922f02c39",
+      "rights": "CC-BY-SA-4.0",
+      "permitted_uses": [
+        "versioned-citation",
+        "short-attributed-quotation"
+      ],
+      "blocked_uses": [
+        "vendor-full-text-without-share-alike-compliance",
+        "treat-one-reading-as-only-school"
+      ],
+      "notes": [
+        "Use image review when punctuation or textual variants affect a rule."
+      ]
+    },
+    {
+      "id": "kanripo-xieji-bianfangshu",
+      "tier": "A",
+      "systems": ["bazi", "date-selection", "fengshui"],
+      "scope": "versioned-classical-rule-provenance",
+      "title": "协纪辨方书, WYG edition",
+      "version": "Kanripo KR3g0051",
+      "publisher": "Kanripo",
+      "canonical_urls": [
+        "https://github.com/kanripo/KR3g0051"
+      ],
+      "commit": "8b5522eb0299afbd575f1cb556e972c71c40c42a",
+      "rights": "CC-BY-SA-4.0",
+      "permitted_uses": [
+        "versioned-citation",
+        "short-attributed-quotation"
+      ],
+      "blocked_uses": [
+        "vendor-full-text-without-share-alike-compliance",
+        "treat-traditional-date-selection-as-causal-fact"
+      ],
+      "notes": [
+        "A historical rule source documents a tradition; it does not validate real-world effects."
+      ]
+    }
+  ]
+}

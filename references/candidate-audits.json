@@ -1,0 +1,528 @@
+{
+  "schema_version": 1,
+  "reviewed_at": "2026-10-22",
+  "candidates": [
+    {
+      "id": "banderzhm/ZhouYiLab",
+      "systems": ["bazi", "calendar", "fengshui", "qimen", "ziwei"],
+      "repository": "https://github.com/banderzhm/ZhouYiLab",
+      "commit": "0fdbd3bda0a9ca5b05945a406d6802ffe6c24b6d",
+      "discovered_via": [
+        "https://x.com/Easycompany333/status/2069395294178193779"
+      ],
+      "code_license": "MIT",
+      "rights": {"code": "clear", "data": "limited", "text": "limited"},
+      "reproducibility": "upstream-ci-only",
+      "independence": "partial",
+      "tier_by_claim": {"engineering": "C", "calculation": "C", "interpretation": "D"},
+      "decision": "audit-candidate",
+      "import": {"code": false, "data": false, "text": false},
+      "allowed_uses": ["test-matrix-design", "profile-contract-design", "external-differential-review"],
+      "blocked_uses": ["primary-authority", "copy-modern-reference-text", "claim-cross-engine-goldens-are-independent"],
+      "notes": [
+        "Strong multi-platform CI and explicit source ledger, but many expected charts still come from modern calculators or websites.",
+        "Review each file's provenance before any future MIT-compatible code migration."
+      ]
+    },
+    {
+      "id": "Brhiza/mingyu",
+      "systems": ["bazi", "calendar", "civil-time", "qimen", "ziwei"],
+      "repository": "https://github.com/Brhiza/mingyu",
+      "commit": "c98044ab764753299f2011640ab4f7584f6e3fec",
+      "discovered_via": [
+        "https://x.com/Easycompany333/status/2069395294178193779"
+      ],
+      "code_license": "AGPL-3.0-only",
+      "rights": {"code": "clear", "data": "limited", "text": "limited"},
+      "reproducibility": "verified",
+      "independence": "shared-lineage",
+      "tier_by_claim": {"engineering": "C", "calculation": "C", "interpretation": "D"},
+      "decision": "audit-candidate",
+      "import": {"code": false, "data": false, "text": false},
+      "allowed_uses": ["behavioral-differential-review", "timezone-test-design", "invariant-design"],
+      "blocked_uses": ["primary-authority", "copy-agpl-code", "copy-modern-reference-text"],
+      "notes": [
+        "Excellent time-normalization and invariant coverage, but calendar and Ziwei paths share tyme4ts or iztro lineage.",
+        "The full suite reproduced only with TZ=UTC; the exhaustive group is outside upstream CI, and a 1900 case diverged under TZ=America/Denver because the host Node/ICU/tzdb environment is not locked.",
+        "AGPL code is not copied into this permissively licensed repository."
+      ]
+    },
+    {
+      "id": "Horace-Maxwell/horosa-skill",
+      "systems": ["bazi", "calendar", "fengshui", "qimen", "ziwei"],
+      "repository": "https://github.com/Horace-Maxwell/horosa-skill",
+      "commit": "318643d2eb01d83284d54d839ff1ed112b0ba55a",
+      "discovered_via": [
+        "https://x.com/Easycompany333/status/2069395294178193779"
+      ],
+      "code_license": "AGPL-3.0-only",
+      "rights": {"code": "limited", "data": "limited", "text": "limited"},
+      "reproducibility": "blocked",
+      "independence": "partial",
+      "tier_by_claim": {"engineering": "C", "calculation": "C", "interpretation": "D"},
+      "decision": "coverage-lead",
+      "import": {"code": false, "data": false, "text": false},
+      "allowed_uses": ["profile-axis-inventory", "release-integrity-ideas", "error-contract-ideas"],
+      "blocked_uses": ["primary-authority", "copy-agpl-code", "claim-public-clean-room-rebuild", "use-same-engine-snapshots-as-independent-goldens"],
+      "notes": [
+        "The public repository omits maintainer-only runtime source needed to rebuild the complete engine.",
+        "Useful as a catalogue of explicit school switches, not as a transparent authority."
+      ]
+    },
+    {
+      "id": "SylarLong/iztro",
+      "systems": ["ziwei"],
+      "repository": "https://github.com/SylarLong/iztro",
+      "commit": "f24f2d9f21c37a3d48aa06c76d73372e4cc9bc94",
+      "discovered_via": ["repository-trace"],
+      "code_license": "MIT",
+      "rights": {"code": "clear", "data": "limited", "text": "limited"},
+      "reproducibility": "upstream-ci-only",
+      "independence": "partial",
+      "tier_by_claim": {"engineering": "C", "calculation": "C", "interpretation": "D"},
+      "decision": "audit-candidate",
+      "import": {"code": false, "data": false, "text": false},
+      "allowed_uses": ["ziwei-field-coverage-review", "explicit-profile-comparison"],
+      "blocked_uses": ["primary-authority", "infer-minute-level-precision", "treat-self-regression-as-independent-golden"],
+      "notes": [
+        "Mature Ziwei engine with explicit school switches, but it has no birthplace, IANA timezone, longitude, or true-solar-time input.",
+        "Many downstream ports and datasets share this lineage and must not be counted as independent votes."
+      ]
+    },
+    {
+      "id": "x-haose/x-iztro",
+      "systems": ["ziwei"],
+      "repository": "https://github.com/x-haose/x-iztro",
+      "commit": "17e35b48dcbf63ded819d96f563a66d1f9e3494c",
+      "discovered_via": ["repository-trace"],
+      "code_license": "MIT",
+      "rights": {"code": "clear", "data": "clear", "text": "not-applicable"},
+      "reproducibility": "upstream-ci-only",
+      "independence": "shared-lineage",
+      "tier_by_claim": {"engineering": "C", "calculation": "C", "interpretation": "D"},
+      "decision": "coverage-lead",
+      "import": {"code": false, "data": false, "text": false},
+      "allowed_uses": ["port-parity-matrix-design", "large-scale-invariant-design"],
+      "blocked_uses": ["primary-authority", "call-js-generated-fixtures-independent-goldens"],
+      "notes": [
+        "Large cross-language parity corpus is generated from iztro and proves port compatibility, not independent chart correctness."
+      ]
+    },
+    {
+      "id": "RoxyAPI/astrology-api-benchmark",
+      "systems": ["fengshui"],
+      "repository": "https://github.com/RoxyAPI/astrology-api-benchmark",
+      "commit": "0f3d187f638011976fe48096f8c291ca53477ff8",
+      "discovered_via": ["repository-search-after-x-lead"],
+      "code_license": "MIT",
+      "rights": {"code": "clear", "data": "limited", "text": "limited"},
+      "reproducibility": "upstream-ci-only",
+      "independence": "partial",
+      "tier_by_claim": {"engineering": "C", "calculation": "C", "interpretation": "D"},
+      "decision": "audit-candidate",
+      "import": {"code": false, "data": false, "text": false},
+      "allowed_uses": ["fengshui-fixture-review", "source-locator-review", "invariant-design"],
+      "blocked_uses": ["primary-authority", "claim-traditional-rules-prove-real-world-effects", "copy-classical-or-modern-text-without-rights-review"],
+      "notes": [
+        "Promising versioned Flying Star and Eight Mansions fixtures with explicit exclusions.",
+        "Treat it as a rule-version regression oracle, never evidence that Feng Shui causes health or wealth outcomes."
+      ]
+    },
+    {
+      "id": "h4x0r/stem-branch",
+      "systems": ["bazi", "calendar"],
+      "repository": "https://github.com/h4x0r/stem-branch",
+      "commit": "154f232c96930d12c5c4031e4cc1ecbdac440755",
+      "discovered_via": ["repository-search-after-x-lead"],
+      "code_license": "Apache-2.0",
+      "rights": {"code": "clear", "data": "limited", "text": "not-applicable"},
+      "reproducibility": "verified",
+      "independence": "partial",
+      "tier_by_claim": {"engineering": "C", "calculation": "C", "interpretation": "D"},
+      "decision": "audit-candidate",
+      "import": {"code": false, "data": false, "text": false},
+      "allowed_uses": ["calendar-boundary-differential-review", "delta-t-uncertainty-ideas", "test-matrix-design"],
+      "blocked_uses": ["primary-authority", "copy-fixtures-with-unclear-redistribution-rights", "copy-conflicting-upstream-code"],
+      "notes": [
+        "Strong test volume and astronomy comparisons, but Bazi day-boundary conventions differ from this repository.",
+        "Some upstream astronomy and fixture provenance has licence conflicts, so no code or dataset is imported."
+      ]
+    },
+    {
+      "id": "mengke-wang/xuziping-bazi",
+      "systems": ["bazi", "calendar"],
+      "repository": "https://github.com/mengke-wang/xuziping-bazi",
+      "commit": "e7f94293df2f10288a9c8154e998f3610f5a27f8",
+      "discovered_via": ["repository-search-after-x-lead"],
+      "code_license": "MIT",
+      "rights": {"code": "clear", "data": "not-applicable", "text": "limited"},
+      "reproducibility": "not-verified",
+      "independence": "partial",
+      "tier_by_claim": {"engineering": "C", "calculation": "C", "interpretation": "D"},
+      "decision": "audit-candidate",
+      "import": {"code": false, "data": false, "text": false},
+      "allowed_uses": ["true-solar-boundary-test-ideas", "external-differential-review"],
+      "blocked_uses": ["primary-authority", "import-interpretive-scores", "assume-unpinned-sxtwl-is-reproducible"],
+      "notes": [
+        "Explicit longitude and UTC-offset inputs are preferable to guessed zones, but the dependency is not exactly pinned and historical offsets remain caller-supplied."
+      ]
+    },
+    {
+      "id": "shunshi-ai/fate-bench",
+      "systems": ["bazi"],
+      "repository": "https://github.com/shunshi-ai/fate-bench",
+      "commit": "0a6e47c2f9efc927cc6a9f46e001768a2898175c",
+      "discovered_via": ["benchmark-trace-from-x-lead"],
+      "code_license": "MIT",
+      "rights": {"code": "clear", "data": "limited", "text": "unclear"},
+      "reproducibility": "not-verified",
+      "independence": "unknown",
+      "tier_by_claim": {"engineering": "C", "calculation": "D", "interpretation": "C"},
+      "decision": "methodology-only",
+      "import": {"code": false, "data": false, "text": false},
+      "allowed_uses": ["answer-provenance-design", "exclusion-rule-design", "benchmark-reporting-design"],
+      "blocked_uses": ["primary-authority", "redistribute-competition-material", "training-or-rag", "treat-top-score-as-human-average"],
+      "notes": [
+        "The repository distinguishes official from secondary answers and documents reproducibility limits.",
+        "Its licences expressly do not grant rights in all underlying competition material."
+      ]
+    },
+    {
+      "id": "ChenJiangxi/BaziQA",
+      "systems": ["bazi"],
+      "repository": "https://github.com/ChenJiangxi/BaziQA",
+      "commit": "3bad3deaa5aa3a191c9c68b4d8b17f46decff45e",
+      "discovered_via": ["benchmark-trace-from-x-lead"],
+      "code_license": "MIT-scoped-to-code-transcription-metadata",
+      "rights": {"code": "clear", "data": "limited", "text": "unclear"},
+      "reproducibility": "not-verified",
+      "independence": "shared-lineage",
+      "tier_by_claim": {"engineering": "C", "calculation": "D", "interpretation": "C"},
+      "decision": "methodology-only",
+      "import": {"code": false, "data": false, "text": false},
+      "allowed_uses": ["version-reporting-design", "option-shuffle-design", "answer-provenance-design"],
+      "blocked_uses": ["primary-authority", "redistribute-competition-material", "training-or-rag", "use-outcome-accuracy-to-validate-chart-engine"],
+      "notes": [
+        "Useful evaluation documentation, but underlying question rights remain with organizers or setters.",
+        "Charts generated with lunar-python or iztro do not independently validate those same engines."
+      ]
+    },
+    {
+      "id": "DestinyLinker/MingLi-Bench",
+      "systems": ["bazi"],
+      "repository": "https://github.com/DestinyLinker/MingLi-Bench",
+      "commit": "b7433280fd86d7a7c27debbc47d0303c218f0bfd",
+      "discovered_via": [
+        "https://x.com/MindfulReturn/status/2052531727764271304"
+      ],
+      "code_license": "MIT",
+      "rights": {"code": "clear", "data": "unclear", "text": "unclear"},
+      "reproducibility": "not-verified",
+      "independence": "shared-lineage",
+      "tier_by_claim": {"engineering": "C", "calculation": "D", "interpretation": "C"},
+      "decision": "methodology-only",
+      "import": {"code": false, "data": false, "text": false},
+      "allowed_uses": ["evaluation-layer-separation-idea", "option-shuffle-idea"],
+      "blocked_uses": ["primary-authority", "redistribute-competition-material", "training-or-rag", "repeat-unverified-leaderboard-claims"],
+      "notes": [
+        "A repository-level MIT file does not establish rights in the underlying competition questions or personal histories."
+      ]
+    },
+    {
+      "id": "shunshi-ai/bazi-reader-mcp",
+      "systems": ["bazi", "calendar"],
+      "repository": "https://github.com/shunshi-ai/bazi-reader-mcp",
+      "commit": "3ababbe31bee4d5ea8b9034171e688158bae10ec",
+      "discovered_via": ["repository-trace-from-x-lead"],
+      "code_license": "MIT",
+      "rights": {"code": "clear", "data": "unclear", "text": "limited"},
+      "reproducibility": "blocked",
+      "independence": "shared-lineage",
+      "tier_by_claim": {"engineering": "C", "calculation": "D", "interpretation": "D"},
+      "decision": "reject",
+      "import": {"code": false, "data": false, "text": false},
+      "allowed_uses": ["negative-test-idea"],
+      "blocked_uses": ["primary-authority", "runtime-dependency", "copy-author-local-fixtures", "use-rounded-longitude-as-civil-time-zone"],
+      "notes": [
+        "Major parity tests rely on absolute author-machine paths and uncommitted caches.",
+        "Its rounded standard-meridian default is not a valid replacement for legal timezone and historical DST data."
+      ]
+    },
+    {
+      "id": "FANzR-arch/Numerologist_skills:qimen-dunjia",
+      "systems": ["calendar", "qimen"],
+      "repository": "https://github.com/FANzR-arch/Numerologist_skills",
+      "commit": "53ab46e7856e8e07a8de8ea96a2d93ed6694bedf",
+      "discovered_via": ["current-runtime-audit"],
+      "code_license": "NOASSERTION",
+      "rights": {"code": "unclear", "data": "limited", "text": "unclear"},
+      "reproducibility": "verified",
+      "independence": "partial",
+      "tier_by_claim": {"engineering": "C", "calculation": "C", "interpretation": "D"},
+      "decision": "audit-candidate",
+      "import": {"code": false, "data": false, "text": false},
+      "allowed_uses": ["labelled-cultural-engineering-profile", "differential-research", "regression-discovery"],
+      "blocked_uses": ["primary-authority", "claim-full-zhirun", "claim-iana-timezone-support", "copy-unlicensed-code-or-text"],
+      "notes": [
+        "This is the pinned runtime, not an independent validation source; its mainline label implements current solar term plus sexagenary five-day yuan plus a fixed bureau table.",
+        "The local adapter restricts it to solar dates from 1901 through 2100, an explicit fixed UTC+8 wall clock, exact dependency and Git pins, and a Tier C disclosure."
+      ]
+    },
+    {
+      "id": "arc119226/qimen_dunjia",
+      "systems": ["calendar", "qimen"],
+      "repository": "https://github.com/arc119226/qimen_dunjia",
+      "commit": "7d941031d685d818d9fd234edf891dba5bd6a323",
+      "discovered_via": ["repository-search-after-x-lead"],
+      "code_license": "MIT",
+      "rights": {"code": "clear", "data": "limited", "text": "limited"},
+      "reproducibility": "verified",
+      "independence": "partial",
+      "tier_by_claim": {"engineering": "C", "calculation": "C", "interpretation": "D"},
+      "decision": "audit-candidate",
+      "import": {"code": false, "data": false, "text": false},
+      "allowed_uses": ["qimen-profile-differential-review", "intercalation-boundary-tests", "source-locator-review"],
+      "blocked_uses": ["primary-authority", "replace-current-engine", "copy-interpretation-text", "assume-utc-plus-8-profile-is-global"],
+      "notes": [
+        "Clean review ran 103 tests at the pinned commit and found explicit 拆补 and 符头置闰 profiles.",
+        "The 2024-12-25 12:00 UTC+8 vector exposes three different documented results and must be reported as a profile difference, not majority-voted."
+      ]
+    },
+    {
+      "id": "kentang2017/kinqimen",
+      "systems": ["calendar", "qimen"],
+      "repository": "https://github.com/kentang2017/kinqimen",
+      "commit": "44eff63fd18e5f42b558de5c674e853fb5da6618",
+      "discovered_via": [
+        "https://x.com/Mulight/status/2053679346565398662"
+      ],
+      "code_license": "NOASSERTION",
+      "rights": {"code": "unclear", "data": "not-applicable", "text": "unclear"},
+      "reproducibility": "not-verified",
+      "independence": "unknown",
+      "tier_by_claim": {"engineering": "D", "calculation": "C", "interpretation": "D"},
+      "decision": "coverage-lead",
+      "import": {"code": false, "data": false, "text": false},
+      "allowed_uses": ["independently-recreate-calendar-day-offset-test"],
+      "blocked_uses": ["primary-authority", "copy-code", "copy-text", "runtime-dependency"],
+      "notes": [
+        "The repository lacks an explicit licence and has very limited tests.",
+        "Its recent same-calendar-date versus elapsed-duration bug is retained only as an independently implemented future test idea."
+      ]
+    },
+    {
+      "id": "atopx/qimen",
+      "systems": ["calendar", "qimen"],
+      "repository": "https://github.com/atopx/qimen",
+      "commit": "8eb06d007d4a5fcc5352d9054f81469e5f023f45",
+      "discovered_via": ["repository-search-after-x-lead"],
+      "code_license": "MIT",
+      "rights": {"code": "clear", "data": "limited", "text": "limited"},
+      "reproducibility": "not-verified",
+      "independence": "partial",
+      "tier_by_claim": {"engineering": "C", "calculation": "C", "interpretation": "D"},
+      "decision": "audit-candidate",
+      "import": {"code": false, "data": false, "text": false},
+      "allowed_uses": ["qimen-profile-coverage-review", "differential-test-design"],
+      "blocked_uses": ["primary-authority", "copy-untraced-calendar-table", "treat-unnamed-software-as-golden"],
+      "notes": [
+        "Covers rotating and flying layouts across hour/day/month/year plus named chaibu and zhirun modes with 21 expected cases.",
+        "The expected software is unnamed, the Shouxing calendar table lacks a source URL and hash, there is no CI, and the required Go toolchain was unavailable in the review environment."
+      ]
+    },
+    {
+      "id": "miounet11/life-kline",
+      "systems": ["bazi"],
+      "repository": "https://github.com/miounet11/life-kline",
+      "commit": "7abf184df370452ee8279d72c8b45bc09e19913b",
+      "discovered_via": [
+        "https://x.com/Mulight/status/2053679346565398662"
+      ],
+      "code_license": "Apache-2.0",
+      "rights": {"code": "clear", "data": "not-applicable", "text": "limited"},
+      "reproducibility": "not-verified",
+      "independence": "unknown",
+      "tier_by_claim": {"engineering": "C", "calculation": "Rejected", "interpretation": "Rejected"},
+      "decision": "product-reference",
+      "import": {"code": false, "data": false, "text": false},
+      "allowed_uses": ["ui-inspiration-only"],
+      "blocked_uses": ["primary-authority", "calculator-oracle", "interpretation-source"],
+      "notes": [
+        "Tests do not provide meaningful assertions and fallback scores include arbitrary weights or pseudorandom behavior."
+      ]
+    },
+    {
+      "id": "aidesignlabio/4pie-deep-reader",
+      "systems": ["bazi", "calendar", "civil-time", "ziwei"],
+      "repository": "https://github.com/aidesignlabio/4pie-deep-reader",
+      "commit": "ec175afe36ee45f311a0db19584c7a9fe7d99f66",
+      "discovered_via": [
+        "https://x.com/aidesignlabio/status/2090120811436757129"
+      ],
+      "code_license": "MIT",
+      "rights": {"code": "clear", "data": "limited", "text": "limited"},
+      "reproducibility": "upstream-ci-only",
+      "independence": "shared-lineage",
+      "tier_by_claim": {"engineering": "C", "calculation": "C", "interpretation": "D"},
+      "decision": "coverage-lead",
+      "import": {"code": false, "data": false, "text": false},
+      "allowed_uses": ["timezone-gate-design", "privacy-scan-design", "replay-hash-design", "failure-contract-design"],
+      "blocked_uses": ["primary-authority", "import-report-text", "treat-iztro-bridge-as-independent-ziwei-engine"],
+      "notes": [
+        "Good IANA gap/fold, pre-1949 manual-review, solar-time evidence, privacy, and replay gates.",
+        "Its astrology goldens are weak, Ziwei delegates to iztro, and several dependencies use open-ended minimum versions."
+      ]
+    },
+    {
+      "id": "reed1898/bazi-tool",
+      "systems": ["bazi", "calendar"],
+      "repository": "https://github.com/reed1898/bazi-tool",
+      "commit": "7e59b42fa3f35c22c1197494f172e96e69d01dcf",
+      "discovered_via": [
+        "https://x.com/noding/status/2031048380835934596"
+      ],
+      "code_license": "MIT",
+      "rights": {"code": "clear", "data": "unclear", "text": "limited"},
+      "reproducibility": "not-verified",
+      "independence": "unknown",
+      "tier_by_claim": {"engineering": "D", "calculation": "Rejected", "interpretation": "Rejected"},
+      "decision": "reject",
+      "import": {"code": false, "data": false, "text": false},
+      "allowed_uses": ["none"],
+      "blocked_uses": ["primary-authority", "calculator-oracle", "runtime-dependency"],
+      "notes": [
+        "Review found a likely eight-hour solar-term timezone error and tests allowing roughly two hours despite a minute-level accuracy claim."
+      ]
+    },
+    {
+      "id": "gongzisahan/sizhu-programming",
+      "systems": ["bazi"],
+      "repository": "https://github.com/gongzisahan/sizhu-programming",
+      "commit": "352d71088c61c819cd680135afdbe1650ff28486",
+      "discovered_via": [
+        "https://x.com/Mulight/status/2053679346565398662"
+      ],
+      "code_license": "MIT",
+      "rights": {"code": "clear", "data": "not-applicable", "text": "unclear"},
+      "reproducibility": "not-verified",
+      "independence": "unknown",
+      "tier_by_claim": {"engineering": "D", "calculation": "Rejected", "interpretation": "Rejected"},
+      "decision": "reject",
+      "import": {"code": false, "data": false, "text": false},
+      "allowed_uses": ["none"],
+      "blocked_uses": ["primary-authority", "calculator-oracle", "copy-book-or-blog-text", "training-or-rag"],
+      "notes": [
+        "The repository describes itself as an early prototype and lacks calendar conversion, solar-term boundaries, and luck-cycle calculation.",
+        "Modern blog and book paraphrases need separate rights and provenance review."
+      ]
+    },
+    {
+      "id": "shizhilya/yuan",
+      "systems": ["bazi", "qimen", "ziwei"],
+      "repository": "https://github.com/shizhilya/yuan",
+      "commit": "c417ae71a8690e4c526b5dc4b9c5af1bcb476d3f",
+      "discovered_via": [
+        "https://x.com/Mulight/status/2053679346565398662"
+      ],
+      "code_license": "NOASSERTION",
+      "rights": {"code": "unclear", "data": "unclear", "text": "unclear"},
+      "reproducibility": "blocked",
+      "independence": "unknown",
+      "tier_by_claim": {"engineering": "Rejected", "calculation": "Rejected", "interpretation": "Rejected"},
+      "decision": "reject",
+      "import": {"code": false, "data": false, "text": false},
+      "allowed_uses": ["none"],
+      "blocked_uses": ["primary-authority", "copy-code", "copy-text", "runtime-dependency"],
+      "notes": [
+        "No explicit licence, no substantive tests, and no complete chart engine."
+      ]
+    },
+    {
+      "id": "Renhuai123/ziwei-doushu:v4-audit",
+      "systems": ["ziwei"],
+      "repository": "https://github.com/Renhuai123/ziwei-doushu",
+      "commit": "0e39b5c9a17e707291f20ef3cc125b3e885351d4",
+      "discovered_via": [
+        "optional-audit-source-review",
+        "https://x.com/wdy188/status/2113022835937685592"
+      ],
+      "code_license": "MIT",
+      "rights": {"code": "clear", "data": "limited", "text": "limited"},
+      "reproducibility": "not-verified",
+      "independence": "shared-lineage",
+      "tier_by_claim": {"engineering": "C", "calculation": "C", "interpretation": "Rejected"},
+      "decision": "audit-candidate",
+      "import": {"code": false, "data": false, "text": false},
+      "allowed_uses": [
+        "structural-differential-review",
+        "regression-discovery",
+        "coverage-gap-discovery"
+      ],
+      "blocked_uses": [
+        "primary-authority",
+        "chart-golden",
+        "import-interpretation-text",
+        "training-or-rag",
+        "claim-release-generator-reproducibility"
+      ],
+      "notes": [
+        "The public regression suite passed at review time, but the release manifest names a private engine and content generator that are absent from the public repository, so the published dataset is not reproducible end to end.",
+        "The release data licence excludes embedded third-party Tian Ji quotations; interpretation text is blocked from responses, training, evaluation, RAG, redistribution, and import.",
+        "Its chart comparison is Tier C and shares important library or table lineage with the local runtime; agreement is not independent validation."
+      ]
+    },
+    {
+      "id": "FANzR-arch/Numerologist_skills:ziwei-doushu",
+      "systems": ["calendar", "ziwei"],
+      "repository": "https://github.com/FANzR-arch/Numerologist_skills",
+      "commit": "53ab46e7856e8e07a8de8ea96a2d93ed6694bedf",
+      "discovered_via": [
+        "current-runtime-audit"
+      ],
+      "code_license": "NOASSERTION",
+      "rights": {"code": "unclear", "data": "limited", "text": "unclear"},
+      "reproducibility": "verified",
+      "independence": "partial",
+      "tier_by_claim": {"engineering": "C", "calculation": "C", "interpretation": "D"},
+      "decision": "audit-candidate",
+      "import": {"code": false, "data": false, "text": false},
+      "allowed_uses": [
+        "labelled-cultural-engineering-profile",
+        "differential-research",
+        "regression-discovery"
+      ],
+      "blocked_uses": [
+        "primary-authority",
+        "claim-timezone-or-geographic-correction",
+        "claim-universal-school-profile",
+        "copy-unlicensed-code-or-text"
+      ],
+      "notes": [
+        "This is the pinned runtime, not an independent validation source; its local adapter accepts only the named ziwei-sanhe-v1 contract with explicit late-Zi and leap-month rules.",
+        "The adapter limits execution to 1901-2100, rejects ignored timezone or longitude fields, verifies a twelve-palace self-checked result, and labels the output Tier C.",
+        "The engine performs no IANA timezone, historical DST, longitude, or true-solar-time correction; minute input only selects a two-hour branch and triggers boundary warnings."
+      ]
+    },
+    {
+      "id": "allanpk716/BaziEval",
+      "systems": ["bazi"],
+      "repository": "https://github.com/allanpk716/BaziEval",
+      "commit": "079d448b98a2e49a298c5c4a09c44a7050e0d5bb",
+      "discovered_via": [
+        "https://x.com/Mulight/status/2053679346565398662"
+      ],
+      "code_license": "NOASSERTION",
+      "rights": {"code": "unclear", "data": "not-applicable", "text": "unclear"},
+      "reproducibility": "blocked",
+      "independence": "unknown",
+      "tier_by_claim": {"engineering": "Rejected", "calculation": "Rejected", "interpretation": "Rejected"},
+      "decision": "reject",
+      "import": {"code": false, "data": false, "text": false},
+      "allowed_uses": ["none"],
+      "blocked_uses": ["primary-authority", "copy-code", "copy-text", "runtime-dependency"],
+      "notes": [
+        "Archived, unlicensed, untested, and based on unattributed web algorithms; review also found a table error and a 23:00 index failure."
+      ]
+    }
+  ]
+}

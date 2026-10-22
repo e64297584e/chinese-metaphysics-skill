@@ -1,0 +1,212 @@
+{
+  "schema_version": 1,
+  "reviewed_at": "2026-10-22",
+  "cases": [
+    {
+      "id": "gbt-reference-jiazi-day",
+      "kind": "hard-golden",
+      "system": "calendar",
+      "calendar_semantics": "normative-modern-reference",
+      "jurisdiction": "mainland-china",
+      "timezone": "Asia/Shanghai",
+      "time_scale": "civil-date",
+      "precision": "day",
+      "uncertainty": "none-stated",
+      "input": {"solar_date": "1949-10-01"},
+      "expected": {"ganzhi_day": "甲子"},
+      "execution": {"adapter": "bazi.day-ganzhi"},
+      "sources": [
+        {"source_id": "gbt-33661-2017", "locator": "section 6.3.2"}
+      ]
+    },
+    {
+      "id": "pmo-2026-lichun-event-minute",
+      "kind": "boundary-golden",
+      "system": "calendar",
+      "calendar_semantics": "proleptic-modern-calendar",
+      "jurisdiction": "mainland-china",
+      "timezone": "Asia/Shanghai",
+      "time_scale": "civil-time",
+      "precision": "minute",
+      "uncertainty": "published-to-minute-only",
+      "input": {"event": "立春", "published_time": "2026-02-04 04:02"},
+      "expected": {"event": "立春", "published_time": "2026-02-04 04:02"},
+      "execution": {"adapter": "bazi.jie-event-minute"},
+      "usage": "Tier A event instant only; Bazi pillar changes are a separate fixed-UTC+8 profile regression.",
+      "sources": [
+        {"source_id": "pmo-calendar-2026", "locator": "2026 calendar, Li Chun row"}
+      ]
+    },
+    {
+      "id": "hko-gbt-2033-leap-eleventh-month",
+      "kind": "hard-golden",
+      "system": "calendar",
+      "calendar_semantics": "proleptic-modern-calendar",
+      "jurisdiction": "china-calendar-profile",
+      "timezone": "Asia/Shanghai",
+      "time_scale": "civil-date",
+      "precision": "day",
+      "uncertainty": "none-stated",
+      "input": {"solar_date": "2033-12-22"},
+      "expected": {"lunar_year": 2033, "lunar_month": 11, "lunar_day": 1, "is_leap_month": true},
+      "execution": {"adapter": "bazi.solar-to-lunar"},
+      "sources": [
+        {"source_id": "hko-conversion-1901-2100", "locator": "2033 annual table"},
+        {"source_id": "gbt-33661-2017", "locator": "leap-month rule"}
+      ]
+    },
+    {
+      "id": "hko-2033-new-year",
+      "kind": "hard-golden",
+      "system": "calendar",
+      "calendar_semantics": "proleptic-modern-calendar",
+      "jurisdiction": "china-calendar-profile",
+      "timezone": "Asia/Shanghai",
+      "time_scale": "civil-date",
+      "precision": "day",
+      "uncertainty": "none-stated",
+      "input": {"solar_date": "2033-01-31"},
+      "expected": {"lunar_year": 2033, "lunar_month": 1, "lunar_day": 1, "is_leap_month": false},
+      "execution": {"adapter": "bazi.solar-to-lunar"},
+      "sources": [
+        {"source_id": "hko-conversion-1901-2100", "locator": "2033 annual table"}
+      ]
+    },
+    {
+      "id": "hko-2033-eighth-month",
+      "kind": "hard-golden",
+      "system": "calendar",
+      "calendar_semantics": "proleptic-modern-calendar",
+      "jurisdiction": "china-calendar-profile",
+      "timezone": "Asia/Shanghai",
+      "time_scale": "civil-date",
+      "precision": "day",
+      "uncertainty": "none-stated",
+      "input": {"solar_date": "2033-08-25"},
+      "expected": {"lunar_year": 2033, "lunar_month": 8, "lunar_day": 1, "is_leap_month": false},
+      "execution": {"adapter": "bazi.solar-to-lunar"},
+      "sources": [
+        {"source_id": "hko-conversion-1901-2100", "locator": "2033 annual table"}
+      ]
+    },
+    {
+      "id": "hko-uncertain-new-moon-2057",
+      "kind": "uncertainty-case",
+      "system": "calendar",
+      "calendar_semantics": "proleptic-modern-calendar",
+      "jurisdiction": "hong-kong-observatory-table",
+      "timezone": "Asia/Hong_Kong",
+      "time_scale": "civil-date",
+      "precision": "day",
+      "uncertainty": "uncertain-day",
+      "input": {"solar_date": "2057-09-28", "event": "new_moon"},
+      "expected": {"behavior": "flag-model-sensitive-do-not-hard-fail"},
+      "execution": {"adapter": "manual-only", "reason": "source warning retained; no runtime warning contract yet"},
+      "sources": [
+        {"source_id": "hko-conversion-1901-2100", "locator": "published far-future uncertainty warning"}
+      ]
+    },
+    {
+      "id": "hko-uncertain-new-moon-2089",
+      "kind": "uncertainty-case",
+      "system": "calendar",
+      "calendar_semantics": "proleptic-modern-calendar",
+      "jurisdiction": "hong-kong-observatory-table",
+      "timezone": "Asia/Hong_Kong",
+      "time_scale": "civil-date",
+      "precision": "day",
+      "uncertainty": "uncertain-day",
+      "input": {"solar_date": "2089-09-04", "event": "new_moon"},
+      "expected": {"behavior": "flag-model-sensitive-do-not-hard-fail"},
+      "execution": {"adapter": "manual-only", "reason": "source warning retained; no runtime warning contract yet"},
+      "sources": [
+        {"source_id": "hko-conversion-1901-2100", "locator": "published far-future uncertainty warning"}
+      ]
+    },
+    {
+      "id": "hko-uncertain-new-moon-2097",
+      "kind": "uncertainty-case",
+      "system": "calendar",
+      "calendar_semantics": "proleptic-modern-calendar",
+      "jurisdiction": "hong-kong-observatory-table",
+      "timezone": "Asia/Hong_Kong",
+      "time_scale": "civil-date",
+      "precision": "day",
+      "uncertainty": "uncertain-day",
+      "input": {"solar_date": "2097-08-07", "event": "new_moon"},
+      "expected": {"behavior": "flag-model-sensitive-do-not-hard-fail"},
+      "execution": {"adapter": "manual-only", "reason": "source warning retained; no runtime warning contract yet"},
+      "sources": [
+        {"source_id": "hko-conversion-1901-2100", "locator": "published far-future uncertainty warning"}
+      ]
+    },
+    {
+      "id": "hko-uncertain-solar-term-2021",
+      "kind": "uncertainty-case",
+      "system": "calendar",
+      "calendar_semantics": "proleptic-modern-calendar",
+      "jurisdiction": "hong-kong-observatory-table",
+      "timezone": "Asia/Hong_Kong",
+      "time_scale": "civil-time",
+      "precision": "minute",
+      "uncertainty": "uncertain-day",
+      "input": {"year": 2021, "event": "冬至"},
+      "expected": {"behavior": "preserve-source-warning"},
+      "execution": {"adapter": "manual-only", "reason": "source warning retained; no runtime warning contract yet"},
+      "sources": [
+        {"source_id": "hko-conversion-1901-2100", "locator": "published solar-term uncertainty warning"}
+      ]
+    },
+    {
+      "id": "hko-uncertain-solar-term-2051",
+      "kind": "uncertainty-case",
+      "system": "calendar",
+      "calendar_semantics": "proleptic-modern-calendar",
+      "jurisdiction": "hong-kong-observatory-table",
+      "timezone": "Asia/Hong_Kong",
+      "time_scale": "civil-time",
+      "precision": "minute",
+      "uncertainty": "uncertain-day",
+      "input": {"year": 2051, "event": "春分"},
+      "expected": {"behavior": "preserve-source-warning"},
+      "execution": {"adapter": "manual-only", "reason": "source warning retained; no runtime warning contract yet"},
+      "sources": [
+        {"source_id": "hko-conversion-1901-2100", "locator": "published solar-term uncertainty warning"}
+      ]
+    },
+    {
+      "id": "hko-uncertain-solar-term-2083",
+      "kind": "uncertainty-case",
+      "system": "calendar",
+      "calendar_semantics": "proleptic-modern-calendar",
+      "jurisdiction": "hong-kong-observatory-table",
+      "timezone": "Asia/Hong_Kong",
+      "time_scale": "civil-time",
+      "precision": "minute",
+      "uncertainty": "uncertain-day",
+      "input": {"year": 2083, "event": "立春"},
+      "expected": {"behavior": "preserve-source-warning"},
+      "execution": {"adapter": "manual-only", "reason": "source warning retained; no runtime warning contract yet"},
+      "sources": [
+        {"source_id": "hko-conversion-1901-2100", "locator": "published solar-term uncertainty warning"}
+      ]
+    },
+    {
+      "id": "hko-uncertain-solar-term-2084",
+      "kind": "uncertainty-case",
+      "system": "calendar",
+      "calendar_semantics": "proleptic-modern-calendar",
+      "jurisdiction": "hong-kong-observatory-table",
+      "timezone": "Asia/Hong_Kong",
+      "time_scale": "civil-time",
+      "precision": "minute",
+      "uncertainty": "uncertain-day",
+      "input": {"year": 2084, "event": "春分"},
+      "expected": {"behavior": "preserve-source-warning"},
+      "execution": {"adapter": "manual-only", "reason": "source warning retained; no runtime warning contract yet"},
+      "sources": [
+        {"source_id": "hko-conversion-1901-2100", "locator": "published solar-term uncertainty warning"}
+      ]
+    }
+  ]
+}

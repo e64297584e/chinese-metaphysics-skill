@@ -36,7 +36,7 @@ Classification: **external observation / evidence tier C**. Agreement can reveal
 
 For `1991-06-15 15:18`, male, both engines agree on the lunar date, life/body palaces, five-element bureau, life/body rulers, 14 major stars, natal transformations, and 32 of 34 shared star positions.
 
-| Surface | Primary `ziwei-sanhe-v1` | External `renhuai-v4-xd2-no-location` | Treatment |
+| Surface | Local Tier-C `ziwei-sanhe-v1` | External `renhuai-v4-xd2-no-location` | Treatment |
 |---|---|---|---|
 | 辛年天魁/天钺 | 魁午、钺寅 | 魁寅、钺午 | known convention difference; never auto-correct |
 | 大限四化 | re-fly by major-period palace stem | natal transformations fixed; palace activation only | incompatible school profiles |

@@ -76,7 +76,7 @@ class PaiPanTests(unittest.TestCase):
         shensha = section(out, "神煞").strip()
         self.assertNotEqual(shensha, "未计算")
         self.assertTrue(shensha)
-        self.assertIn("天乙贵人", shensha)
+        self.assertNotIn("天乙贵人", shensha)
         self.assertNotIn("Traceback", out)
         self.assertNotIn("Traceback", err)
 
@@ -96,6 +96,23 @@ class PaiPanTests(unittest.TestCase):
         self.assertEqual(code_b, 0, err_b)
         self.assertEqual(pillars(out_a)["year"], "丁卯")
         self.assertEqual(pillars(out_b)["year"], "戊辰")
+
+    def test_official_2026_lichun_minute_boundary(self):
+        """PMO anchors 04:02; pillar assertions are this repo's fixed-UTC+8 profile."""
+        code_a, out_a, err_a = run_pai("--solar", "2026-02-04", "--hour", "04:01", "--sex", "男")
+        code_b, out_b, err_b = run_pai("--solar", "2026-02-04", "--hour", "04:03", "--sex", "男")
+        self.assertEqual(code_a, 0, err_a)
+        self.assertEqual(code_b, 0, err_b)
+        self.assertEqual(pillars(out_a)["year"], "乙巳")
+        self.assertEqual(pillars(out_a)["month"], "己丑")
+        self.assertEqual(pillars(out_b)["year"], "丙午")
+        self.assertEqual(pillars(out_b)["month"], "庚寅")
+
+    def test_gbt_reference_day_is_jiazi(self):
+        """GB/T 33661-2017 section 6.3.2 anchors 1949-10-01 as 甲子日."""
+        code, out, err = run_pai("--solar", "1949-10-01", "--hour", "12:00", "--sex", "男")
+        self.assertEqual(code, 0, err)
+        self.assertEqual(pillars(out)["day"], "甲子")
 
     def test_late_zi_uses_next_day_pillar(self):
         """23:30 夜子时：日柱用次日辛巳，时支子。"""
@@ -171,6 +188,15 @@ class PaiPanTests(unittest.TestCase):
             with self.subTest(solar=solar):
                 self.assertEqual(pai_pan.solar_to_lunar(*solar), expected)
 
+    def test_hko_2033_leap_eleventh_month(self):
+        """HKO's 2033 table catches new-year, month-eight, and leap-month errors."""
+        sys.path.insert(0, HERE)
+        import pai_pan
+
+        self.assertEqual(pai_pan.solar_to_lunar(2033, 1, 31), (2033, 1, 1, False))
+        self.assertEqual(pai_pan.solar_to_lunar(2033, 8, 25), (2033, 8, 1, False))
+        self.assertEqual(pai_pan.solar_to_lunar(2033, 12, 22), (2033, 11, 1, True))
+
     def test_deceased_year_stops_liunian(self):
         """--deceased-year 2010：流年不出现 2011 及更晚。"""
         code, out, err = run_pai(
@@ -199,6 +225,23 @@ class PaiPanTests(unittest.TestCase):
         self.assertRegex(qiyun, r"\d+岁\d+个月")
         self.assertIn(qiyun + "起至", out)
 
+    def test_qiyun_classical_five_days_three_shichen_is_twenty_one_months(self):
+        """《三命通会》五日三时：一日十二时，所以是 5.25 日、21 个月。"""
+        sys.path.insert(0, HERE)
+        import pai_pan
+
+        self.assertEqual(pai_pan.qiyun_from_days(5 + 3 / 12), (1, 9))
+        self.assertEqual(pai_pan.qiyun_from_days(-(5 + 3 / 12)), (1, 9))
+
+    def test_qiyun_synthetic_half_month_uses_profile_half_up_policy(self):
+        """5.125 日是合成量化边界；验证本 profile，不冒充古籍例。"""
+        sys.path.insert(0, HERE)
+        import pai_pan
+
+        self.assertEqual(pai_pan.qiyun_from_days(5 + 3 / 24), (1, 9))
+        self.assertEqual(pai_pan.qiyun_from_days(-(5 + 3 / 24)), (1, 9))
+        self.assertEqual(pai_pan.qiyun_from_days(3), (1, 0))
+
     def test_rejects_inconsistent_solar_and_lunar_inputs(self):
         code, out, err = run_pai(
             "--solar", "1990-05-16", "--lunar", "1990-04-21", "--shichen", "午", "--sex", "男"
@@ -209,12 +252,12 @@ class PaiPanTests(unittest.TestCase):
 
 class ShenshaTests(unittest.TestCase):
     def test_golden_shensha_hits_and_misses(self):
-        """1990-05-15 午时男：有天乙贵人、将星；地支无申无卯，无驿马、桃花。"""
+        """1990-05-15 午时男：庚不以午为天乙；有将星，无驿马、桃花。"""
         code, out, err = run_pai("--solar", "1990-05-15", "--shichen", "午", "--sex", "男")
         self.assertEqual(code, 0, err)
         shensha = section(out, "神煞")
         self.assertNotEqual(shensha.strip(), "未计算")
-        self.assertIn("天乙贵人", shensha)
+        self.assertNotIn("天乙贵人", shensha)
         self.assertIn("将星", shensha)
         self.assertNotIn("驿马", shensha)
         self.assertNotIn("桃花", shensha)
@@ -241,6 +284,39 @@ class ShenshaTests(unittest.TestCase):
                 text = "\n".join(pai_pan.compute_shensha(*case["args"]))
                 for name in case["has"]:
                     self.assertIn(name, text)
+
+    def test_tianyi_geng_uses_ox_goat_not_tiger_horse(self):
+        """《协纪辨方书》卷七：庚贵人在丑未，寅午只属于辛。"""
+        sys.path.insert(0, HERE)
+        import pai_pan
+
+        no_hit = "\n".join(
+            pai_pan.compute_shensha("乙", "寅", "丁", "午", "庚", "寅", None, None, "男")
+        )
+        hit = "\n".join(
+            pai_pan.compute_shensha("乙", "寅", "丁", "午", "庚", "未", None, None, "男")
+        )
+        self.assertNotIn("天乙贵人", no_hit)
+        self.assertIn("天乙贵人", hit)
+
+    def test_yangren_profile_is_five_yang_stems(self):
+        """《三命通会》卷五 profile：阴干不报阳刃，庚酉仍命中。"""
+        sys.path.insert(0, HERE)
+        import pai_pan
+
+        old_yin_entries = (("乙", "寅"), ("丁", "巳"), ("己", "巳"), ("辛", "子"), ("癸", "亥"))
+        for day_stem, old_branch in old_yin_entries:
+            with self.subTest(day_stem=day_stem, old_branch=old_branch):
+                yin_stem = "\n".join(
+                    pai_pan.compute_shensha(
+                        "甲", old_branch, "丙", "辰", day_stem, "申", None, None, "女"
+                    )
+                )
+                self.assertNotIn("羊刃", yin_stem)
+        yang_stem = "\n".join(
+            pai_pan.compute_shensha("甲", "申", "丁", "巳", "庚", "酉", None, None, "男")
+        )
+        self.assertIn("羊刃", yang_stem)
 
 
 if __name__ == "__main__":

@@ -4,15 +4,21 @@
 from __future__ import annotations
 
 import argparse
+import importlib.metadata
 import importlib.util
 import json
 import shutil
 import subprocess
+import sys
 from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parent.parent
 MANIFEST = ROOT / "references" / "upstreams.json"
+PINNED_PYTHON_PACKAGES = {
+    "lunar_python": ("lunar-python", "1.4.8"),
+    "tzdata": ("tzdata", "2026.5"),
+}
 
 
 def git_state(path: Path) -> tuple[str | None, bool]:
@@ -103,12 +109,35 @@ def main() -> int:
         if not zstd_ok:
             failures.append("zstd")
 
-    for module in ("lunar_python", "zoneinfo"):
+    for module in ("lunar_python", "tzdata", "zoneinfo"):
         ok = importlib.util.find_spec(module) is not None
-        print(f"{'OK' if ok else 'FAIL'} python module: {module}")
+        detail = ""
+        if ok and module in PINNED_PYTHON_PACKAGES:
+            distribution, expected = PINNED_PYTHON_PACKAGES[module]
+            try:
+                actual = importlib.metadata.version(distribution)
+            except importlib.metadata.PackageNotFoundError:
+                actual = "missing-metadata"
+            ok = actual == expected
+            detail = f" {actual} (expected {expected})"
+        print(f"{'OK' if ok else 'FAIL'} python module: {module}{detail}")
         if not ok:
             failures.append(module)
             bootstrap_repairable = True
+
+    evidence = subprocess.run(
+        [sys.executable, str(ROOT / "scripts" / "validate_evidence.py")],
+        check=False,
+    )
+    if evidence.returncode:
+        failures.append("evidence-registry")
+
+    calendar_goldens = subprocess.run(
+        [sys.executable, str(ROOT / "scripts" / "test_calendar_goldens.py")],
+        check=False,
+    )
+    if calendar_goldens.returncode:
+        failures.append("calendar-goldens")
 
     if failures:
         if dirty_sources:

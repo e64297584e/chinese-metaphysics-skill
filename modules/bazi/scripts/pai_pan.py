@@ -35,7 +35,7 @@
    阳年男/阴年女顺排；阴年男/阳年女逆排。
    从月柱的下一柱（顺）或上一柱（逆）开始，不要把月柱本身当作第一步大运。
    起运年龄 = 出生日到最近「节」的天数 ÷ 3（顺数下一节，逆数上一节）。
-   余 1 天 ≈ 4 个月，余 2 天 ≈ 8 个月。起运前用月柱作小运。
+   余 1 天 ≈ 4 个月，余 2 天 ≈ 8 个月。交运前仅列月柱参考，未另算小运。
    锚点：1990-05-15 男（阳年）必须顺排。
 
 7. 节气时刻：正式排盘使用固定版本历法引擎的精确时刻。
@@ -55,6 +55,7 @@
 import argparse
 import math
 import sys
+from decimal import Decimal, ROUND_HALF_UP
 from datetime import date, datetime, timedelta, timezone
 from functools import lru_cache
 
@@ -152,7 +153,7 @@ TIANYI = {
     "丁": ("亥", "酉"),
     "壬": ("卯", "巳"),
     "癸": ("卯", "巳"),
-    "庚": ("丑", "未", "寅", "午"),
+    "庚": ("丑", "未"),
     "辛": ("寅", "午"),
 }
 # 天德：("gan", 干) 查天干；("zhi", 支) 查地支
@@ -283,15 +284,10 @@ JINYU = {
 }
 YANGBLADE = {
     "甲": "卯",
-    "乙": "寅",
     "丙": "午",
-    "丁": "巳",
     "戊": "午",
-    "己": "巳",
     "庚": "酉",
-    "辛": "子",
     "壬": "子",
-    "癸": "亥",
 }
 YUANCHEN_FORWARD = {
     "子": "未",
@@ -912,7 +908,10 @@ def compute_shensha(
     add("天医", _shensha_positions(tianyi_prev, zhis, ZHI_LABELS), "月支前一位")
     add("禄神", _shensha_positions(CIGUAN[day_gan], zhis, ZHI_LABELS), "日干")
     add("金舆", _shensha_positions(JINYU[day_gan], zhis, ZHI_LABELS), "日干")
-    add("羊刃", _shensha_positions(YANGBLADE[day_gan], zhis, ZHI_LABELS), "日干")
+    # 《三命通会》卷五的“阳刃”口径只取五阳干。现代十干扩展法是另一
+    # profile，不能无声明地混入；尤其旧表的“辛→子”也不属于常见扩展表。
+    if day_gan in YANGBLADE:
+        add("羊刃", _shensha_positions(YANGBLADE[day_gan], zhis, ZHI_LABELS), "日干（五阳干口径）")
     add(
         "劫煞",
         _shensha_positions(_sanhe_needles(year_zhi, day_zhi, JIESHA), zhis, ZHI_LABELS),
@@ -1032,16 +1031,14 @@ def resolve_hour_pillar(day_gan, shichen):
 
 
 def qiyun_from_days(days):
-    """天数 ÷ 3 = 岁；余 1 天≈4 个月，余 2 天≈8 个月。不足一天按比例折月。"""
-    days = abs(float(days))
-    whole = int(days)
-    frac = days - whole
-    years, rem = divmod(whole, 3)
-    months = rem * 4 + int(round(frac * 4))
-    if months >= 12:
-        years += months // 12
-        months = months % 12
-    return years, months
+    """三日折一年，一日折四月；不足一月按本 profile 的整数月半入。
+
+    Decimal + ROUND_HALF_UP avoids Python's bankers rounding.  The half-up
+    quantization is an explicit engineering convention, not a classical quote.
+    """
+    value = abs(Decimal(str(days)))
+    total_months = int((value * Decimal(4)).quantize(Decimal("1"), rounding=ROUND_HALF_UP))
+    return divmod(total_months, 12)
 
 
 def build_dayun(month_gan, month_zhi, forward, qiyun_years, qiyun_months, steps=8):
@@ -1347,7 +1344,7 @@ def parse_hour(text):
 
 
 def build_parser():
-    p = argparse.ArgumentParser(description="四柱八字排盘（北京时间，无第三方依赖）")
+    p = argparse.ArgumentParser(description="四柱八字排盘（固定 UTC+8；使用锁定 lunar_python 依赖）")
     p.add_argument("--solar", help="阳历 YYYY-MM-DD")
     p.add_argument("--lunar", help="农历 YYYY-MM-DD（年-月-日数字）")
     p.add_argument("--leap", action="store_true", help="农历闰月")
